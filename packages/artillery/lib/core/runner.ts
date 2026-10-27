@@ -406,11 +406,7 @@ function runScenario(
       script.scenarios,
       (scenarioSpec: Record<string, any>, scenarioIndex: number) => {
         const name = scenarioSpec.engine || script.config.engine || 'http';
-        // NOTE: pre-existing behavior: throws when an engine failed to
-        // load (undefined entry in the engines list).
-        const engine = runState.engines.find(
-          (e) => (e as EngineInstance).__name === name
-        );
+        const engine = runState.engines.find((e) => e?.__name === name);
 
         if (typeof engine === 'undefined') {
           const scenarioNameOrIndex = scenarioSpec.name || scenarioIndex;
@@ -658,9 +654,7 @@ async function handleScriptHook(
     });
 
     const name = script[hook].engine || 'http';
-    // NOTE: pre-existing behavior: throws when an engine failed to
-    // load (undefined entry in the engines list).
-    const engine = engines.find((e) => (e as EngineInstance).__name === name);
+    const engine = engines.find((e) => e?.__name === name);
 
     if (typeof engine === 'undefined') {
       throw new Error(
